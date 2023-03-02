@@ -47,10 +47,7 @@ public class ServerHelper implements Runnable {
                     client.close();
                 } else {
                     localPrintStream.println("Try again");
-                    for (int i = 0; i < wordSplit.length ; i++) {
-                        localPrintStream.println(wordSplit[i]);
 
-                    }
                 }
 
             } catch (IOException e) {
