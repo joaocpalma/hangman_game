@@ -11,31 +11,41 @@ public class Server {
     private ServerSocket serverSocket;
     private String hangManWord;
     private String[] gameWords = {
-            "hello",
-            "blood",
+            "class",
+            "method",
             "message",
             "question",
-            "infinite"
+            "infinite",
+            "academic",
+            "informal",
+            "festival",
+            "benfica",
+            "positive",
+            "computer",
+            "programming",
+            "abstract",
+            "properties",
+            "collections",
+            "override",
+            "variable"
     };
     private int random = (int) (Math.random() * gameWords.length);
     HashMap<String, Socket> playerList = new HashMap<>();
-
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
 
     }
-
     public HashMap<String, Socket> getPlayerList() {
         return playerList;
     }
-
     public void init() {
         while (true) {
-            try {
                 hangManWord = gameWords[random];
-
+            try {
                 System.out.println("Waiting for player");
-                Socket client = serverSocket.accept();
+                Socket client = null;
+
+                    client = serverSocket.accept();
 
                 PrintStream printStream = new PrintStream(client.getOutputStream());
 
@@ -44,7 +54,6 @@ public class Server {
                 FileReader gameMenu = new FileReader("sources/HangMan_menu.txt");
 
                 BufferedReader readMenu = new BufferedReader(gameMenu);
-
 
                 String menu;
 
@@ -65,13 +74,14 @@ public class Server {
 
                 System.out.println(name + " connected");
 
-                Thread thread = new Thread(new ServerHelper(client, name, hangManWord, this));
-                thread.start();
+                
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                    Thread thread = new Thread(new ServerHelper(client, name, hangManWord, this));
+                    thread.start();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
-}
-
+        }
+    }

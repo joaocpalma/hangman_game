@@ -55,6 +55,7 @@ public class ServerHelper implements Runnable {
         wordSplit = hangManWord.split("");
         finalArr = new String[wordSplit.length];
         popfinalArr();
+
         while (playerAttempts < 7) {
             try {
 
