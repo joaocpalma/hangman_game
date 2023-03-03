@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ServerHelper implements Runnable {
+    public final static String prefix = "";
     private Socket client;
     private Server server;
     private String name;
@@ -63,13 +64,13 @@ public class ServerHelper implements Runnable {
                 BufferedReader localReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
 
-                FileReader hanMan1 = new FileReader("sources/HangMan_1.txt");
-                FileReader hanMan2 = new FileReader("sources/HangMan_2.txt");
-                FileReader hanMan3 = new FileReader("sources/HangMan_3.txt");
-                FileReader hanMan4 = new FileReader("sources/HangMan_4.txt");
-                FileReader hanMan5 = new FileReader("sources/HangMan_5.txt");
-                FileReader hanMan6 = new FileReader("sources/HangMan_6.txt");
-                FileReader hanMan7 = new FileReader("sources/HangMan_7.txt");
+                FileReader hanMan1 = new FileReader(prefix+"HangMan_1.txt");
+                FileReader hanMan2 = new FileReader(prefix+"HangMan_2.txt");
+                FileReader hanMan3 = new FileReader(prefix+"HangMan_3.txt");
+                FileReader hanMan4 = new FileReader(prefix+"HangMan_4.txt");
+                FileReader hanMan5 = new FileReader(prefix+"HangMan_5.txt");
+                FileReader hanMan6 = new FileReader(prefix+"HangMan_6.txt");
+                FileReader hanMan7 = new FileReader(prefix+"HangMan_7.txt");
 
 
                 Prompt prompt = new Prompt(client.getInputStream(), localPrintStream);

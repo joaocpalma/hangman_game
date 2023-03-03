@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Server {
+    public final static String prefix = "";
     private ServerSocket serverSocket;
     private String hangManWord;
     private String[] gameWords = {
@@ -51,7 +52,7 @@ public class Server {
 
                 Prompt prompt = new Prompt(client.getInputStream(), printStream);
 
-                FileReader gameMenu = new FileReader("sources/HangMan_menu.txt");
+                FileReader gameMenu = new FileReader(prefix+"HangMan_menu.txt");
 
                 BufferedReader readMenu = new BufferedReader(gameMenu);
 
@@ -61,6 +62,7 @@ public class Server {
                     printStream.println(menu);
                     printStream.flush();
                 }
+
 
                 StringInputScanner askName = new StringInputScanner();
                 askName.setMessage("What is your name? \n");
@@ -74,7 +76,6 @@ public class Server {
 
                 System.out.println(name + " connected");
 
-                
 
                     Thread thread = new Thread(new ServerHelper(client, name, hangManWord, this));
                     thread.start();
