@@ -27,14 +27,25 @@ public class Server {
         while (true){
             try {
 
-
                 System.out.println("Waiting for player");
                 Socket client = serverSocket.accept();
 
                 PrintStream printStream = new PrintStream(client.getOutputStream());
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
                 Prompt prompt = new Prompt(client.getInputStream(), printStream);
+
+                FileReader gameMenu = new FileReader("sources/HangMan_menu.txt");
+
+                BufferedReader readMenu = new BufferedReader(gameMenu);
+
+
+
+                String menu;
+
+                while ((menu = readMenu.readLine()) != null) {
+                    printStream.println(menu);
+                    printStream.flush();
+                }
 
                 StringInputScanner askName = new StringInputScanner();
                 askName.setMessage("What is your name? \n");
@@ -46,9 +57,9 @@ public class Server {
 
                 playerList.put(name,client);
 
-                System.out.println("Player connected");
+                System.out.println(name + " connected");
 
-                Thread thread = new Thread(new ServerHelper(client,this));
+                Thread thread = new Thread(new ServerHelper(client,name,this));
                 thread.start();
 
             } catch (IOException e) {
