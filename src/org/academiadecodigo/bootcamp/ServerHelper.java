@@ -8,42 +8,37 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ServerHelper implements Runnable {
-
     private Socket client;
     private Server server;
     private String name;
-    private String[] gameWords = {
-            "hello",
-            "blood",
-            "message",
-            "question",
-            "infinite"
-    };
-    int random = (int)(Math.random()* gameWords.length);
-    private String handManWord = gameWords[random];
-    private String[] wordSplit = handManWord.split("");
+    private String hangManWord;
+    private String[] wordSplit;
     private int playerAttempts = 0;
     private int totalAttempts = 7;
-    private String[] finalArr = new String[wordSplit.length];
+    private String[] finalArr;
     private int correctLetter = 0;
-    public void popfinalArr(){
+    boolean containsLetter = false;
+
+    public ServerHelper(Socket client, String name, String hangManWord, Server server) {
+        this.client = client;
+        this.server = server;
+        this.name = name;
+        this.hangManWord = hangManWord;
+    }
+
+    public void popfinalArr() {
         Arrays.fill(finalArr, " _ ");
     }
 
-    boolean containsLetter = false;
-
-    LinkedList<String> addedLetter = new LinkedList<>();
-    LinkedList<Integer> letterIndex = new LinkedList<>();
-    LinkedList<String> playerLetters = new LinkedList<>();
-
-    public boolean checkLetter(String letter){
+    public boolean checkLetter(String letter) {
         for (int i = 0; i < wordSplit.length; i++) {
-            if (letter.equals(wordSplit[i])){
+            if (letter.equals(wordSplit[i])) {
                 containsLetter = true;
             }
         }
         return containsLetter;
     }
+
     public void addLetter(String letter) {
         for (int i = 0; i < wordSplit.length; i++) {
             if (finalArr[i].equals(" _ ")) {
@@ -54,16 +49,13 @@ public class ServerHelper implements Runnable {
             }
         }
     }
-    public ServerHelper(Socket client,String name, Server server) {
-        this.client = client;
-        this.server = server;
-        this.name = name;
-        popfinalArr();
-    }
 
     @Override
     public void run() {
-        while (playerAttempts <7) {
+        wordSplit = hangManWord.split("");
+        finalArr = new String[wordSplit.length];
+        popfinalArr();
+        while (playerAttempts < 7) {
             try {
 
                 PrintStream localPrintStream = new PrintStream(client.getOutputStream());
@@ -85,7 +77,7 @@ public class ServerHelper implements Runnable {
 
                 for (String l : finalArr)
                     localPrintStream.print(l);
-                    localPrintStream.flush();
+                localPrintStream.flush();
 
                 askLetter.setMessage("\n Guess a letter " + "(" + finalArr.length + " letters word) \n");
                 askLetter.setError("Not a letter...");
@@ -96,12 +88,12 @@ public class ServerHelper implements Runnable {
                     addLetter(letter);
                     containsLetter = false;
 
-                    if (correctLetter == finalArr.length){
-                        for(String key : server.getPlayerList().keySet()){
+                    if (correctLetter == finalArr.length) {
+                        for (String key : server.getPlayerList().keySet()) {
 
                             Socket localSocket = server.getPlayerList().get(key);
                             BufferedWriter localWriter = new BufferedWriter(new OutputStreamWriter(localSocket.getOutputStream()));
-                            localWriter.write(name+ " WON \n");
+                            localWriter.write(name + " WON \n");
                             localWriter.flush();
 
                         }
@@ -120,8 +112,7 @@ public class ServerHelper implements Runnable {
                             localPrintStream.flush();
                         }
                         localPrintStream.println("Try again " + "(you have " + totalAttempts + " attempts) \n");
-                    }
-                    else if (playerAttempts == 2) {
+                    } else if (playerAttempts == 2) {
                         BufferedReader hangmanRead2 = new BufferedReader(hanMan2);
 
                         String hangman2;
@@ -130,8 +121,7 @@ public class ServerHelper implements Runnable {
                             localPrintStream.flush();
                         }
                         localPrintStream.println("Try again " + "(you have " + totalAttempts + " attempts) \n");
-                    }
-                    else if (playerAttempts == 3) {
+                    } else if (playerAttempts == 3) {
                         BufferedReader hangmanRead3 = new BufferedReader(hanMan3);
 
                         String hangman3;
@@ -140,8 +130,7 @@ public class ServerHelper implements Runnable {
                             localPrintStream.flush();
                         }
                         localPrintStream.println("Try again " + "(you have " + totalAttempts + " attempts) \n");
-                    }
-                    else if (playerAttempts == 4) {
+                    } else if (playerAttempts == 4) {
                         BufferedReader hangmanRead4 = new BufferedReader(hanMan4);
 
                         String hangman4;
@@ -150,8 +139,7 @@ public class ServerHelper implements Runnable {
                             localPrintStream.flush();
                         }
                         localPrintStream.println("Try again " + "(you have " + totalAttempts + " attempts) \n");
-                    }
-                    else if (playerAttempts == 5) {
+                    } else if (playerAttempts == 5) {
                         BufferedReader hangmanRead5 = new BufferedReader(hanMan5);
 
                         String hangman5;
@@ -160,8 +148,7 @@ public class ServerHelper implements Runnable {
                             localPrintStream.flush();
                         }
                         localPrintStream.println("Try again " + "(you have " + totalAttempts + " attempts) \n");
-                    }
-                    else if (playerAttempts == 6) {
+                    } else if (playerAttempts == 6) {
                         BufferedReader hangmanRead6 = new BufferedReader(hanMan6);
 
                         String hangman6;
@@ -170,8 +157,7 @@ public class ServerHelper implements Runnable {
                             localPrintStream.flush();
                         }
                         localPrintStream.println("Try again " + "(you have " + totalAttempts + " attempt) \n");
-                    }
-                    else if (playerAttempts == 7) {
+                    } else if (playerAttempts == 7) {
                         BufferedReader hangmanRead7 = new BufferedReader(hanMan7);
 
                         String hangman7;
