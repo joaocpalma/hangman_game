@@ -8,18 +8,19 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ServerHelper implements Runnable {
-    public final static String prefix = "";
+    public final static String PREFIX = "";
     private Socket client;
     private Server server;
     private String name;
     private String hangManWord;
     private String[] wordSplit;
+    private String[] finalArr;
     private int playerAttempts = 0;
     private int totalAttempts = 7;
-    private String[] finalArr;
     private int correctLetter = 0;
     boolean containsLetter = false;
 
+    // ServerHelper Constructor
     public ServerHelper(Socket client, String name, String hangManWord, Server server) {
         this.client = client;
         this.server = server;
@@ -27,10 +28,12 @@ public class ServerHelper implements Runnable {
         this.hangManWord = hangManWord;
     }
 
+    //This method will populate the Array with " _ "
     public void popfinalArr() {
         Arrays.fill(finalArr, " _ ");
     }
 
+    // This method will check if the players letter exist. If it does, will return true.
     public boolean checkLetter(String letter) {
         for (int i = 0; i < wordSplit.length; i++) {
             if (letter.equals(wordSplit[i])) {
@@ -40,6 +43,8 @@ public class ServerHelper implements Runnable {
         return containsLetter;
     }
 
+    // This method (for i loop) will iterate until he finds a " _ "
+    // After that, will check if the letter played is equal to the game letter in the same position (i)
     public void addLetter(String letter) {
         for (int i = 0; i < wordSplit.length; i++) {
             if (finalArr[i].equals(" _ ")) {
@@ -53,7 +58,11 @@ public class ServerHelper implements Runnable {
 
     @Override
     public void run() {
+
+        // Split the game word (given by the server)
         wordSplit = hangManWord.split("");
+
+        // Here will create a new String and populate it with " _ "
         finalArr = new String[wordSplit.length];
         popfinalArr();
 
@@ -63,47 +72,51 @@ public class ServerHelper implements Runnable {
                 PrintStream localPrintStream = new PrintStream(client.getOutputStream());
                 BufferedReader localReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-
-                FileReader hanMan1 = new FileReader(prefix+"HangMan_1.txt");
-                FileReader hanMan2 = new FileReader(prefix+"HangMan_2.txt");
-                FileReader hanMan3 = new FileReader(prefix+"HangMan_3.txt");
-                FileReader hanMan4 = new FileReader(prefix+"HangMan_4.txt");
-                FileReader hanMan5 = new FileReader(prefix+"HangMan_5.txt");
-                FileReader hanMan6 = new FileReader(prefix+"HangMan_6.txt");
-                FileReader hanMan7 = new FileReader(prefix+"HangMan_7.txt");
+                FileReader hanMan1 = new FileReader("resources/HangMan_1.txt");
+                FileReader hanMan2 = new FileReader("resources/HangMan_2.txt");
+                FileReader hanMan3 = new FileReader("resources/HangMan_3.txt");
+                FileReader hanMan4 = new FileReader("resources/HangMan_4.txt");
+                FileReader hanMan5 = new FileReader("resources/HangMan_5.txt");
+                FileReader hanMan6 = new FileReader("resources/HangMan_6.txt");
+                FileReader hanMan7 = new FileReader("resources/HangMan_7.txt");
 
 
                 Prompt prompt = new Prompt(client.getInputStream(), localPrintStream);
 
                 StringInputScanner askLetter = new StringInputScanner();
 
+                // Print all the " _ "
                 for (String l : finalArr)
                     localPrintStream.print(l);
-                localPrintStream.flush();
+                    localPrintStream.flush();
 
+                //  Ask for a letter
                 askLetter.setMessage("\n Guess a letter " + "(" + finalArr.length + " letters word) \n");
                 askLetter.setError("Not a letter...");
 
-                String letter = prompt.getUserInput(askLetter);
+                String letter = prompt.getUserInput(askLetter); // save the player letter
 
                 if (checkLetter(letter) == true) {
                     addLetter(letter);
                     containsLetter = false;
 
+                    // If guess all letters, send a msg to all players telling who won and close the printWriter
                     if (correctLetter == finalArr.length) {
                         for (String key : server.getPlayerList().keySet()) {
 
                             Socket localSocket = server.getPlayerList().get(key);
                             BufferedWriter localWriter = new BufferedWriter(new OutputStreamWriter(localSocket.getOutputStream()));
-                            localWriter.write(name + " WON \n");
+                            localWriter.write(name + " WON " + "the word was " + hangManWord + "\n");
                             localWriter.flush();
+                            localWriter.close();
 
                         }
                     }
 
+                    // If the player give incorrect letter, will decrease the player attempts and print HangMan image
                 } else {
-                    playerAttempts++;
-                    totalAttempts--;
+                    playerAttempts++; // increase the player failed attempts
+                    totalAttempts--; // decrease the total attempts
 
                     if (playerAttempts == 1) {
                         BufferedReader hangmanRead1 = new BufferedReader(hanMan1);

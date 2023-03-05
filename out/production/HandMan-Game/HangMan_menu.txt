@@ -10,7 +10,7 @@
                                     aa,    ,88
                                      "Y8bbdP"
 _
-GAME RULES: [PORT 5555]
+GAME RULES: [PORT 6666]
 
 ◘ Think of a word and try to guess it by suggesting the letters.
 
@@ -18,4 +18,13 @@ GAME RULES: [PORT 5555]
 
 ◘ If the guessing player suggests a letter which occurs in the word,
 the program writes it in all its correct positions.
+
+      _______
+     |/
+     |
+     |
+     |
+     |
+     |
+    _|___
 

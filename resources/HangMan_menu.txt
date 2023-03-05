@@ -19,3 +19,12 @@ GAME RULES: [PORT 6666]
 ◘ If the guessing player suggests a letter which occurs in the word,
 the program writes it in all its correct positions.
 
+      _______
+     |/
+     |
+     |
+     |
+     |
+     |
+    _|___
+
