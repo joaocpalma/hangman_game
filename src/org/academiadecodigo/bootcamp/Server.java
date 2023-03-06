@@ -51,21 +51,17 @@ public class Server {
         return playerList;
     }
     private int timer = 30;
-    private int playerCount = 0;
 
     public void init() {
-        //while (playerList.size() != playersNum) {
+        while (playerList.size() != playersNum) {
 
             // Server will save a random word and send it to all players
                 hangManWord = gameWords[random];
             try {
                 System.out.println("Waiting for players");
                 Socket client = null;
-            do{
 
                 client = serverSocket.accept();
-                playerCount++;
-            } while (playerCount != playersNum);
 
                 PrintStream printStream = new PrintStream(client.getOutputStream());
 
@@ -108,4 +104,4 @@ public class Server {
 
     }
         }
-    //}
+    }
