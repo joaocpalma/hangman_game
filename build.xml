@@ -22,7 +22,7 @@
     </target>
 
     <target name="compile" description="Compiles the source code" depends="prepare">
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="7" target="7">
+        <javac source="7" target="7" srcdir="${src.dir}" destdir="${classes.dir}">
             <classpath refid="classpath"/>
         </javac>
     </target>

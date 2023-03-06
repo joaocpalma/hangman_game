@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class ServerHelper implements Runnable {
     public final static String PREFIX = "";
@@ -72,13 +73,13 @@ public class ServerHelper implements Runnable {
                 PrintStream localPrintStream = new PrintStream(client.getOutputStream());
                 BufferedReader localReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-                FileReader hanMan1 = new FileReader("resources/HangMan_1.txt");
-                FileReader hanMan2 = new FileReader("resources/HangMan_2.txt");
-                FileReader hanMan3 = new FileReader("resources/HangMan_3.txt");
-                FileReader hanMan4 = new FileReader("resources/HangMan_4.txt");
-                FileReader hanMan5 = new FileReader("resources/HangMan_5.txt");
-                FileReader hanMan6 = new FileReader("resources/HangMan_6.txt");
-                FileReader hanMan7 = new FileReader("resources/HangMan_7.txt");
+                FileReader hanMan1 = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_1.txt");
+                FileReader hanMan2 = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_2.txt");
+                FileReader hanMan3 = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_3.txt");
+                FileReader hanMan4 = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_4.txt");
+                FileReader hanMan5 = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_5.txt");
+                FileReader hanMan6 = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_6.txt");
+                FileReader hanMan7 = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_7.txt");
 
 
                 Prompt prompt = new Prompt(client.getInputStream(), localPrintStream);
@@ -94,7 +95,7 @@ public class ServerHelper implements Runnable {
                 askLetter.setMessage("\n Guess a letter " + "(" + finalArr.length + " letters word) \n");
                 askLetter.setError("Not a letter...");
 
-                String letter = prompt.getUserInput(askLetter); // save the player letter
+                String letter = prompt.getUserInput(askLetter).toLowerCase(); // save the player letter
 
                 if (checkLetter(letter) == true) {
                     addLetter(letter);
@@ -106,7 +107,7 @@ public class ServerHelper implements Runnable {
 
                             Socket localSocket = server.getPlayerList().get(key);
                             BufferedWriter localWriter = new BufferedWriter(new OutputStreamWriter(localSocket.getOutputStream()));
-                            localWriter.write(name + " WON " + "the word was " + hangManWord + "\n");
+                            localWriter.write("\n"+name + " WON " + "the word was " + hangManWord + "\n");
                             localWriter.flush();
                             localWriter.close();
 

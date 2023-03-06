@@ -10,14 +10,16 @@
                                     aa,    ,88
                                      "Y8bbdP"
 _
-GAME RULES: [PORT 6666]
+HOW TO RUN
+java -jar hangman-project [PORT] [PLAYER SIZE]
+GAME RULES:
 
-◘ Think of a word and try to guess it by suggesting the letters.
+- Think of a word and try to guess it by suggesting the letters.
 
-◘ The word to guess is represented by a row of dashes, giving the number of letters.
+- The word to guess is represented by a row of dashes, giving the number of letters.
 
-◘ If the guessing player suggests a letter which occurs in the word,
-the program writes it in all its correct positions.
+- If the guessing player suggests a letter which occurs in the word,
+    the program writes it in all its correct positions.
 
       _______
      |/

@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Server {
     public final static String PREFIX = "";
-
+    private int playersNum = 0;
     private ServerSocket serverSocket;
 
     //This String will receive a word randomly from gameWords list.
@@ -37,9 +37,9 @@ public class Server {
     };
 
     // Constructors
-    public Server(int port) throws IOException {
+    public Server(int port, int playersNum) throws IOException {
         serverSocket = new ServerSocket(port);
-
+        this.playersNum = playersNum;
     }
     private int random = (int) (Math.random() * gameWords.length);
 
@@ -50,24 +50,29 @@ public class Server {
     public HashMap<String, Socket> getPlayerList() {
         return playerList;
     }
-    private int timer = 45;
+    private int timer = 30;
+    private int playerCount = 0;
+
     public void init() {
-        while (true) {
+        //while (playerList.size() != playersNum) {
 
             // Server will save a random word and send it to all players
                 hangManWord = gameWords[random];
             try {
-                System.out.println("Waiting for player");
+                System.out.println("Waiting for players");
                 Socket client = null;
+            do{
 
-                    client = serverSocket.accept();
+                client = serverSocket.accept();
+                playerCount++;
+            } while (playerCount != playersNum);
 
                 PrintStream printStream = new PrintStream(client.getOutputStream());
 
                 Prompt prompt = new Prompt(client.getInputStream(), printStream);
 
                 // FileReader for the game menu
-                FileReader gameMenu = new FileReader("resources/HangMan_menu.txt");
+                FileReader gameMenu = new FileReader("/Users/codecadet/workspace/hangman-project/resources/HangMan_menu.txt");
                 BufferedReader readMenu = new BufferedReader(gameMenu);
 
                 String menu; //
@@ -92,23 +97,15 @@ public class Server {
 
                 System.out.println(name + " connected");
 
-                /*while (timer != 0) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    timer--;
-                    printStream.println(timer);
-                }*/
 
                 // Here the server will start the Thread and pass the player information (name,socket) & the word to the ServerHelper.
-                    Thread thread = new Thread(new ServerHelper(client, name, hangManWord, this));
-                    thread.start();
+                Thread thread = new Thread(new ServerHelper(client, name, hangManWord, this));
+                thread.start();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
         }
-    }
+    //}
